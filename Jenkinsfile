@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         SNYK_TOKEN = credentials('snyk-api-token')
-        IMAGE_NAME = "Demo:${BUILD_NUMBER}" 
+        IMAGE_NAME = "demo:${BUILD_NUMBER}" 
     }
     stages {
         stage('Clean Workspace') {
