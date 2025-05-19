@@ -5,6 +5,11 @@ pipeline {
         IMAGE_NAME = "Demo:${BUILD_NUMBER}" 
     }
     stages {
+        stage('Clean Workspace') {
+            steps {
+                cleanWs()
+            }
+        }
         stage('Clone GitHub Repo') {
             steps {
                 git 'https://github.com/Orisuniyanu/3mtt_Demo.git'
@@ -26,4 +31,4 @@ pipeline {
             }
         }
     }
-}
+}   
