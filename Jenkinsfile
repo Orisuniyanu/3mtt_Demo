@@ -7,7 +7,7 @@ pipeline {
     stages {
         stage('Clean Workspace') {
             steps {
-                cleanWs() // Cleans workspace before starting
+                cleanWs()
             }
         }
         
@@ -21,11 +21,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Check if Dockerfile exists
-                    if (fileExists('Dockerfile')) {
-                        sh "docker build -t $IMAGE_NAME ."
-                    } else {
-                        error("Dockerfile not found!")
+                    sh "docker build -t $IMAGE_NAME ."
                     }
                 }
             }
