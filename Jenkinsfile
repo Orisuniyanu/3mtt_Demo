@@ -7,28 +7,37 @@ pipeline {
     stages {
         stage('Clean Workspace') {
             steps {
-                cleanWs()
+                cleanWs() // Cleans workspace before starting
             }
         }
+        
         stage('Clone GitHub Repo') {
             steps {
-                git 'https://github.com/Orisuniyanu/3mtt_Demo.git'
+                git branch: 'main', 
+                    url: 'https://github.com/Orisuniyanu/3mtt_Demo.git'
             }
         }
 
-        stage('Build image from GitHub Repo') {
+        stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $IMAGE_NAME .'
+                script {
+                    // Check if Dockerfile exists
+                    if (fileExists('Dockerfile')) {
+                        sh "docker build -t $IMAGE_NAME ."
+                    } else {
+                        error("Dockerfile not found!")
+                    }
+                }
             }
         }
 
-        stage('Scan the Image with Snyk AI') {
+        stage('Scan with Snyk') {
             steps {
-                sh '''
+                sh """
                     snyk auth $SNYK_TOKEN
-                    snyk test --docker $IMAGE_NAME --file=Dockerfile
-                '''
+                    snyk container test $IMAGE_NAME --file=Dockerfile
+                """
             }
         }
     }
-}   
+}
